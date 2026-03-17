@@ -5,19 +5,28 @@ async def progress(current, total, message, start):
     now = time.time()
     diff = now - start
 
-    speed = current / diff if diff > 0 else 0
+    speed = current / diff if diff else 0
     percent = current * 100 / total
 
-    bar = "█" * int(percent/5) + "░" * (20-int(percent/5))
+    filled = int(percent // 5)
+    bar = "█" * filled + "░" * (20 - filled)
 
     text = f"""
-📦 Processing File
+╭━━━〔 ⚙️ Processing 〕━━━╮
 
+📊 Progress:
 [{bar}]
 
-{percent:.2f} %
+📈 {percent:.2f} %
 
 ⚡ Speed: {speed/1024/1024:.2f} MB/s
+📦 Done: {current/1024/1024:.2f} MB
+📁 Total: {total/1024/1024:.2f} MB
+
+╰━━━━━━━━━━━━━━━━━━━━╯
 """
 
-    await message.edit_text(text)
+    try:
+        await message.edit_text(text)
+    except:
+        pass
